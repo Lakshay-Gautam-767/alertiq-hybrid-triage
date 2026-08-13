@@ -27,49 +27,14 @@ When you deploy an application to the cloud, it can generate **thousands of log 
 
 ## How It Works
 
-```
-                    ┌───────────────────────────────┐
-                    │   Raw log / ticket / alert     │
-                    └────────────────┬────────────────┘
-                                     ▼
-                    ┌───────────────────────────────┐
-                    │        Classical Classifier      │
-                    │   TF-IDF  +  Logistic Regression │
-                    └────────────────┬────────────────┘
-                                     ▼
-                    ┌───────────────────────────────┐
-                    │ Confident enough AND not        │
-                    │        CRITICAL severity?        │
-                    └───────┬───────────────┬─────────┘
-                        YES │               │ NO
-                             ▼               ▼
-              ┌───────────────────┐   ┌───────────────────────┐
-              │  Return classical   │   │   Escalate to LLM       │
-              │      label          │   │   (Groq · Llama 3.1)    │
-              │  ~$0.02 / 1000 evts │   │  ~$2.50 / 1000 evts     │
-              └────────────────────┘   └───────────┬─────────────┘
-                                                    ▼
-                                        ┌───────────────────────┐
-                                        │  Label + reasoning       │
-                                        │  → written to feedback   │
-                                        │    store (CSV)           │
-                                        └───────────┬─────────────┘
-                                                    │
-                                     retrain ────────┘
-                                     (folds feedback back into
-                                      the classical model)
-```
-
-1. A batch of raw log lines is submitted to `/api/classify`.
-2. Each line is scored by the classical **TF-IDF + Logistic Regression** model, which returns a predicted label and a confidence score.
-3. A routing rule decides the next step:
-   - If confidence is **below the configured threshold**, **or**
-   - the predicted label is in the **always-escalate set** (currently `CRITICAL`, since a false negative there is costly)
-   → the log is escalated to the LLM for a second opinion.
-4. Escalated logs are sent to **Groq** (Llama 3.1 8B Instant) with a strict system prompt that forces a single label + one-sentence reasoning, returned as JSON.
-5. Every LLM-labeled example is persisted to a feedback CSV.
-6. Hitting `/api/retrain` folds that feedback back into the base training data and retrains the classical model — closing the loop so fewer logs need escalation over time.
-7. A cost tracker converts routing counts into a `$ / 1,000 events` metric, surfaced on the dashboard.
+1. **Ingest** — a raw log/ticket/alert line comes in via `/api/classify`.
+2. **Classical Classifier** scores it (TF-IDF + Logistic Regression) → returns a predicted label + confidence score.
+3. **Routing decision:**
+   - ✅ Confident **and** not `CRITICAL` → **return the classical label** directly (~$0.02 / 1,000 events)
+   - ⚠️ Not confident enough, **or** predicted label is `CRITICAL` → **escalate to the LLM** (Groq · Llama 3.1) for a second opinion (~$2.50 / 1,000 events)
+4. The LLM returns a label + a one-sentence reasoning string, which is written to the **feedback store** (CSV).
+5. Calling `/api/retrain` folds that feedback back into the base training data and retrains the classical model from scratch — so the escalation rate (and LLM bill) shrinks the longer the system runs.
+6. A cost tracker converts routing counts into a `$ / 1,000 events` metric, surfaced live on the dashboard.
 
 ---
 
