@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triage — Hybrid Log Classifier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0F14;
+    --panel: #121820;
+    --panel-2: #171F29;
+    --border: #232D3A;
+    --text: #E6EDF3;
+    --muted: #7C8B9A;
+    --classical: #4FD1C5;
+    --classical-dim: rgba(79,209,197,0.12);
+    --llm: #F0B429;
+    --llm-dim: rgba(240,180,41,0.12);
+    --critical: #F1554C;
+    --security: #B98CFF;
+    --radius: 10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+  ::selection{ background: var(--classical-dim); }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(23,31,41,0.6), transparent);
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand .mark{
+    width:30px; height:30px; border-radius:7px;
+    background:linear-gradient(135deg, var(--classical), var(--llm));
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px; color:#0B0F14;
+  }
+  .brand h1{
+    font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:600; margin:0;
+    letter-spacing:0.2px;
+  }
+  .brand .sub{ font-size:11px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+
+  .status-pill{
+    display:flex; align-items:center; gap:8px; font-size:12px;
+    color:var(--muted); font-family:'JetBrains Mono',monospace;
+    padding:6px 12px; border:1px solid var(--border); border-radius:100px;
+  }
+  .dot{ width:7px; height:7px; border-radius:50%; background:var(--muted); }
+  .dot.ok{ background:var(--classical); box-shadow:0 0 8px var(--classical); }
+  .dot.err{ background:var(--critical); box-shadow:0 0 8px var(--critical); }
+
+  .api-config{
+    display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted);
+  }
+  .api-config input{
+    background:var(--panel-2); border:1px solid var(--border); color:var(--text);
+    border-radius:6px; padding:5px 8px; font-family:'JetBrains Mono',monospace; font-size:11px;
+    width:190px;
+  }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:26px 28px 60px; }
+
+  /* ---- Routing flow signature element ---- */
+  .flow-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:20px 22px; margin-bottom:22px;
+  }
+  .flow-title{ font-size:12px; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.08em;}
+  .flow-bar{
+    height:34px; border-radius:8px; overflow:hidden; display:flex;
+    background:var(--panel-2); border:1px solid var(--border);
+  }
+  .flow-seg{
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:600;
+    transition:width 0.6s cubic-bezier(.4,0,.2,1);
+    white-space:nowrap; overflow:hidden;
+  }
+  .flow-seg.classical{ background:linear-gradient(90deg,#1E4B47,var(--classical-dim)); color:var(--classical); }
+  .flow-seg.llm{ background:linear-gradient(90deg,var(--llm-dim),#4A3A12); color:var(--llm); }
+  .flow-legend{ display:flex; gap:22px; margin-top:12px; font-size:12px; color:var(--muted); }
+  .flow-legend span{ display:flex; align-items:center; gap:6px; }
+  .swatch{ width:9px; height:9px; border-radius:2px; }
+
+  /* ---- Grid layout ---- */
+  .grid{ display:grid; grid-template-columns: 1.1fr 1fr; gap:20px; }
+  @media (max-width: 880px){ .grid{ grid-template-columns:1fr; } }
+
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:20px 22px;
+  }
+  .card h2{
+    font-family:'Space Grotesk',sans-serif; font-size:14px; margin:0 0 4px; font-weight:600;
+  }
+  .card .hint{ font-size:12px; color:var(--muted); margin:0 0 14px; }
+
+  textarea{
+    width:100%; min-height:180px; resize:vertical;
+    background:var(--panel-2); border:1px solid var(--border); border-radius:8px;
+    color:var(--text); font-family:'JetBrains Mono',monospace; font-size:12.5px;
+    padding:12px; line-height:1.6;
+  }
+  textarea:focus{ outline:none; border-color:var(--classical); }
+
+  .row{ display:flex; gap:10px; margin-top:12px; align-items:center; flex-wrap:wrap; }
+  button{
+    background:var(--classical); color:#0B0F14; border:none; border-radius:8px;
+    padding:10px 18px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px;
+    cursor:pointer; transition:transform 0.15s, opacity 0.15s;
+  }
+  button:hover{ opacity:0.88; }
+  button:active{ transform:scale(0.98); }
+  button.ghost{
+    background:transparent; color:var(--muted); border:1px solid var(--border);
+  }
+  button.ghost:hover{ color:var(--text); border-color:var(--classical); opacity:1; }
+  button:disabled{ opacity:0.4; cursor:not-allowed; }
+
+  .metrics{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .metric{
+    background:var(--panel-2); border:1px solid var(--border); border-radius:8px; padding:14px;
+  }
+  .metric .val{ font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:600; }
+  .metric .lbl{ font-size:11px; color:var(--muted); margin-top:3px; }
+  .metric.classical .val{ color:var(--classical); }
+  .metric.llm .val{ color:var(--llm); }
+
+  .results{ margin-top:22px; }
+  table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  th{
+    text-align:left; font-family:'JetBrains Mono',monospace; font-size:10.5px;
+    color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;
+    padding:8px 10px; border-bottom:1px solid var(--border);
+  }
+  td{ padding:10px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
+  tr:hover td{ background:rgba(255,255,255,0.015); }
+  .logtext{ font-family:'JetBrains Mono',monospace; font-size:12px; color:#C9D4DE; max-width:340px; }
+  .badge{
+    display:inline-flex; align-items:center; gap:5px; font-family:'JetBrains Mono',monospace;
+    font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:5px; text-transform:uppercase;
+  }
+  .badge.INFO{ background:rgba(124,139,154,0.15); color:var(--muted); }
+  .badge.WARNING{ background:var(--llm-dim); color:var(--llm); }
+  .badge.ERROR{ background:rgba(241,85,76,0.12); color:var(--critical); }
+  .badge.CRITICAL{ background:var(--critical); color:#0B0F14; }
+  .badge.SECURITY_ALERT{ background:rgba(185,140,255,0.15); color:var(--security); }
+
+  .route-tag{ font-family:'JetBrains Mono',monospace; font-size:11px; }
+  .route-tag.classical_ml{ color:var(--classical); }
+  .route-tag.llm{ color:var(--llm); }
+
+  .conf-bar{ width:60px; height:5px; background:var(--panel-2); border-radius:3px; overflow:hidden; margin-top:4px;}
+  .conf-fill{ height:100%; background:var(--classical); }
+
+  .empty{ text-align:center; padding:40px 0; color:var(--muted); font-size:13px; }
+  .empty .big{ font-family:'JetBrains Mono',monospace; font-size:26px; margin-bottom:8px; opacity:0.5;}
+
+  .toast{
+    position:fixed; bottom:22px; right:22px; background:var(--panel-2);
+    border:1px solid var(--border); border-radius:8px; padding:12px 16px;
+    font-size:12.5px; color:var(--text); max-width:340px; display:none;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  }
+  .toast.err{ border-color:var(--critical); color:var(--critical); }
+  .toast.show{ display:block; animation:slideup 0.25s ease; }
+  @keyframes slideup{ from{ transform:translateY(8px); opacity:0;} to{ transform:translateY(0); opacity:1; } }
+
+  .reasoning{ font-size:11px; color:var(--muted); font-style:italic; margin-top:4px; max-width:340px; }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="mark">λ</div>
+      <div>
+        <h1>Triage</h1>
+        <div class="sub">hybrid log/anomaly classifier</div>
+      </div>
+    </div>
+    <div class="row" style="margin:0;">
+      <div class="api-config">
+        API base:
+        <input id="apiBase" value="http://localhost:8000" />
+      </div>
+      <div class="status-pill" id="statusPill"><span class="dot" id="statusDot"></span><span id="statusText">checking backend…</span></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="flow-card">
+      <div class="flow-title">Routing split — this session</div>
+      <div class="flow-bar">
+        <div class="flow-seg classical" id="flowClassical" style="width:50%;">0 · classical ML</div>
+        <div class="flow-seg llm" id="flowLlm" style="width:50%;">0 · LLM escalation</div>
+      </div>
+      <div class="flow-legend">
+        <span><span class="swatch" style="background:var(--classical)"></span>Handled by classical model (cheap, fast)</span>
+        <span><span class="swatch" style="background:var(--llm)"></span>Escalated to LLM (uncertain or critical)</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Paste logs / tickets / alerts</h2>
+        <p class="hint">One entry per line. Mix of routine and unusual lines works best to see the routing in action.</p>
+        <textarea id="logInput" placeholder="User priya logged in successfully from 192.168.1.5
+Production database payments-db is DOWN - all connections refused
+Multiple failed login attempts detected for user admin from 45.33.12.9"></textarea>
+        <div class="row">
+          <button id="classifyBtn">Classify batch</button>
+          <button class="ghost" id="sampleBtn">Load sample logs</button>
+          <button class="ghost" id="retrainBtn">Retrain on feedback</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Live metrics</h2>
+        <p class="hint">Pulled from <code>/api/stats</code> — cumulative across all requests this session.</p>
+        <div class="metrics">
+          <div class="metric classical"><div class="val" id="mTotal">0</div><div class="lbl">total processed</div></div>
+          <div class="metric llm"><div class="val" id="mEscRate">0%</div><div class="lbl">escalation rate</div></div>
+          <div class="metric classical"><div class="val" id="mCost">$0.00</div><div class="lbl">avg cost / 1,000 events</div></div>
+          <div class="metric llm"><div class="val" id="mEscCount">0</div><div class="lbl">escalated to LLM</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="results">
+      <div class="card">
+        <h2>Classification results</h2>
+        <p class="hint">Each row shows which path handled it, and why — the classical model's own confidence, or the LLM's reasoning when escalated.</p>
+        <div id="resultsWrap">
+          <div class="empty"><div class="big">◌</div>No results yet. Paste some logs and hit Classify batch.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+const els = {
+  apiBase: document.getElementById('apiBase'),
+  statusDot: document.getElementById('statusDot'),
+  statusText: document.getElementById('statusText'),
+  logInput: document.getElementById('logInput'),
+  classifyBtn: document.getElementById('classifyBtn'),
+  sampleBtn: document.getElementById('sampleBtn'),
+  retrainBtn: document.getElementById('retrainBtn'),
+  resultsWrap: document.getElementById('resultsWrap'),
+  toast: document.getElementById('toast'),
+  flowClassical: document.getElementById('flowClassical'),
+  flowLlm: document.getElementById('flowLlm'),
+  mTotal: document.getElementById('mTotal'),
+  mEscRate: document.getElementById('mEscRate'),
+  mCost: document.getElementById('mCost'),
+  mEscCount: document.getElementById('mEscCount'),
+};
+
+const SAMPLE_LOGS = [
+  "User rahul logged in successfully from 192.168.4.21",
+  "Scheduled backup completed for database user-db",
+  "API response time for checkout exceeded 2s threshold (2450ms)",
+  "Disk usage on search-svc reached 78% capacity",
+  "Failed to connect to database payments-db after 5 retries",
+  "Production database payments-db is DOWN - all connections refused",
+  "Kubernetes node auth-service not responding - all pods evicted",
+  "Multiple failed login attempts detected for user admin from 45.33.12.9",
+  "SQL injection attempt blocked on endpoint /checkout",
+  "Weird unrecognized batch anomaly during midnight reconciliation job #4471",
+].join("\n");
+
+function apiBase(){ return els.apiBase.value.replace(/\/$/, ''); }
+
+function showToast(msg, isErr){
+  els.toast.textContent = msg;
+  els.toast.className = 'toast show' + (isErr ? ' err' : '');
+  setTimeout(()=> els.toast.className='toast', 3500);
+}
+
+async function checkHealth(){
+  try{
+    const res = await fetch(apiBase() + '/');
+    const data = await res.json();
+    if(data.model_ready){
+      els.statusDot.className = 'dot ok';
+      els.statusText.textContent = 'backend connected · model ready';
+    } else {
+      els.statusDot.className = 'dot err';
+      els.statusText.textContent = 'backend up, model NOT trained';
+    }
+  } catch(e){
+    els.statusDot.className = 'dot err';
+    els.statusText.textContent = 'backend unreachable';
+  }
+}
+
+async function refreshStats(){
+  try{
+    const res = await fetch(apiBase() + '/api/stats');
+    const s = await res.json();
+    els.mTotal.textContent = s.total_processed;
+    els.mEscRate.textContent = Math.round(s.escalation_rate * 100) + '%';
+    els.mCost.textContent = '$' + s.avg_cost_per_1000_events.toFixed(2);
+    els.mEscCount.textContent = s.total_escalated;
+
+    const classicalCount = s.total_processed - s.total_escalated;
+    const total = s.total_processed || 1;
+    const cPct = Math.round((classicalCount/total)*100);
+    const lPct = 100 - cPct;
+    els.flowClassical.style.width = Math.max(cPct,6) + '%';
+    els.flowLlm.style.width = Math.max(lPct,6) + '%';
+    els.flowClassical.textContent = classicalCount + ' · classical ML';
+    els.flowLlm.textContent = s.total_escalated + ' · LLM escalation';
+  } catch(e){ /* silent - stats are best-effort */ }
+}
+
+function badgeHtml(label){
+  return `<span class="badge ${label}">${label.replace('_',' ')}</span>`;
+}
+
+function renderResults(results){
+  if(results.length === 0){
+    els.resultsWrap.innerHTML = '<div class="empty"><div class="big">◌</div>No results yet.</div>';
+    return;
+  }
+  let rows = results.map(r => `
+    <tr>
+      <td class="logtext">${escapeHtml(r.raw_text)}</td>
+      <td>${badgeHtml(r.final_label)}</td>
+      <td>
+        <span class="route-tag ${r.routed_to}">${r.routed_to === 'llm' ? '→ LLM' : '→ classical'}</span>
+        ${r.routed_to === 'classical_ml' ? `<div class="conf-bar"><div class="conf-fill" style="width:${Math.round(r.confidence*100)}%"></div></div>` : ''}
+        ${r.reasoning ? `<div class="reasoning">${escapeHtml(r.reasoning)}</div>` : ''}
+      </td>
+      <td class="logtext" style="color:var(--muted)">${Math.round(r.confidence*100)}%</td>
+    </tr>
+  `).join('');
+
+  els.resultsWrap.innerHTML = `
+    <table>
+      <thead><tr><th>Log entry</th><th>Final label</th><th>Routing</th><th>Model confidence</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+async function classify(){
+  const lines = els.logInput.value.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(lines.length === 0){ showToast('Paste at least one log line first', true); return; }
+
+  els.classifyBtn.disabled = true;
+  els.classifyBtn.textContent = 'Classifying…';
+
+  try{
+    const res = await fetch(apiBase() + '/api/classify', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ logs: lines.map(l => ({raw_text: l})) })
+    });
+    if(!res.ok){
+      const err = await res.json().catch(()=>({detail: res.statusText}));
+      throw new Error(err.detail || 'Request failed');
+    }
+    const data = await res.json();
+    renderResults(data.results);
+    showToast(`Classified ${data.total} logs · ${data.escalated} escalated to LLM · ~$${data.estimated_cost_usd.toFixed(4)}`);
+    refreshStats();
+  } catch(e){
+    showToast('Error: ' + e.message, true);
+  } finally {
+    els.classifyBtn.disabled = false;
+    els.classifyBtn.textContent = 'Classify batch';
+  }
+}
+
+async function retrain(){
+  els.retrainBtn.disabled = true;
+  els.retrainBtn.textContent = 'Retraining…';
+  try{
+    const res = await fetch(apiBase() + '/api/retrain', { method:'POST' });
+    const data = await res.json();
+    showToast(data.message || 'Retrain complete', data.status === 'error');
+  } catch(e){
+    showToast('Retrain failed: ' + e.message, true);
+  } finally {
+    els.retrainBtn.disabled = false;
+    els.retrainBtn.textContent = 'Retrain on feedback';
+  }
+}
+
+els.classifyBtn.addEventListener('click', classify);
+els.sampleBtn.addEventListener('click', () => { els.logInput.value = SAMPLE_LOGS; });
+els.retrainBtn.addEventListener('click', retrain);
+els.apiBase.addEventListener('change', checkHealth);
+
+checkHealth();
+refreshStats();
+setInterval(checkHealth, 15000);
+</script>
+
+</body>
+</html>

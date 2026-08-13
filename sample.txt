@@ -1,0 +1,13 @@
+User priya logged in successfully from 192.168.1.5
+Scheduled backup completed for database user-db
+Health check passed for service checkout
+New user vikram registered successfully
+API response time for checkout exceeded 2s threshold (2450ms)
+Disk usage on search-svc reached 78% capacity
+SSL certificate for payments-api expires in 14 days
+Failed to connect to database user-db after 5 retries
+Request to notif-worker failed with status 500
+SQL injection attempt blocked on endpoint /checkout
+Multiple failed login attempts detected for user amit from 45.33.12.9
+Weird unrecognized batch anomaly during midnight reconciliation job
+Something strange happened with the payment gateway sync

@@ -1,0 +1,17 @@
+
+
+for model training , run it on terminal ::
+
+python -m backend.ml.train_classifier
+
+
+for running backend ::
+
+python -m uvicorn backend.main:app --reload --port 8000
+
+
+for opening frontend :: 
+
+click on frontend folder ---> click on 'Index.html' ---> Run it on Server
+
+Now frm sample.txt you can paste some logs and then click on classify batch .

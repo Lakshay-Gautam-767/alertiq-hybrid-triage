@@ -1,0 +1,301 @@
+text,label
+SQL injection attempt blocked on endpoint /notif-worker,SECURITY_ALERT
+Unusual data exfiltration pattern detected from search-svc,SECURITY_ALERT
+"Service checkout crashed - out of memory, restarting pod",CRITICAL
+Unhandled exception in payments-api: TimeoutError,ERROR
+Connection pool for user-db nearing max capacity,WARNING
+Full disk outage on user-db - service unavailable,CRITICAL
+Cache warmed up successfully in 2544ms,INFO
+Payment processing failed for order #889 - gateway timeout,ERROR
+Connection pool for checkout nearing max capacity,WARNING
+SQL injection attempt blocked on endpoint /payments-api,SECURITY_ALERT
+Scheduled backup completed for database search-svc,INFO
+"Service auth-service crashed - out of memory, restarting pod",CRITICAL
+Failed to send email to sneha - SMTP connection refused,ERROR
+Unusual data exfiltration pattern detected from user-db,SECURITY_ALERT
+Payment processing failed for order #932 - gateway timeout,ERROR
+Kubernetes node auth-service not responding - all pods evicted,CRITICAL
+Possible brute-force attack detected on login endpoint from 192.168.88.72,SECURITY_ALERT
+Retry attempt 482 for job user-db after transient failure,WARNING
+Fatal error: search-svc process terminated unexpectedly,CRITICAL
+Disk usage on checkout reached 78% capacity,WARNING
+Request to notif-worker failed with status 500,ERROR
+Unusual data exfiltration pattern detected from user-db,SECURITY_ALERT
+Kubernetes node user-db not responding - all pods evicted,CRITICAL
+Kubernetes node payments-api not responding - all pods evicted,CRITICAL
+Suspicious API key usage pattern detected for key ending 935,SECURITY_ALERT
+New user anjali registered successfully,INFO
+Cache warmed up successfully in 4444ms,INFO
+User vikram logged in successfully from 192.168.71.63,INFO
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Fatal error: user-db process terminated unexpectedly,CRITICAL
+Suspicious API key usage pattern detected for key ending 193,SECURITY_ALERT
+Unhandled exception in checkout: TimeoutError,ERROR
+Deployment of user-db v4.0.4 completed successfully,INFO
+Retry attempt 580 for job search-svc after transient failure,WARNING
+New user sneha registered successfully,INFO
+SQL injection attempt blocked on endpoint /search-svc,SECURITY_ALERT
+User amit logged in successfully from 192.168.7.144,INFO
+Payment processing failed for order #16 - gateway timeout,ERROR
+Connection pool for auth-service nearing max capacity,WARNING
+Health check passed for service checkout,INFO
+Job notif-worker failed after 441 minutes with exit code 1,ERROR
+Retry attempt 773 for job notif-worker after transient failure,WARNING
+Unhandled exception in user-db: TimeoutError,ERROR
+Cache warmed up successfully in 4632ms,INFO
+Retry attempt 197 for job notif-worker after transient failure,WARNING
+Deprecated endpoint /user-db/v1 called by client 192.168.174.190,WARNING
+Health check passed for service payments-api,INFO
+Disk usage on checkout reached 78% capacity,WARNING
+Possible brute-force attack detected on login endpoint from 192.168.87.27,SECURITY_ALERT
+Suspicious API key usage pattern detected for key ending 514,SECURITY_ALERT
+New user sneha registered successfully,INFO
+Connection pool for auth-service nearing max capacity,WARNING
+NullPointerException in module checkout at line 816,ERROR
+Unusual data exfiltration pattern detected from checkout,SECURITY_ALERT
+Job checkout failed after 243 minutes with exit code 1,ERROR
+Suspicious API key usage pattern detected for key ending 937,SECURITY_ALERT
+Job search-svc failed after 466 minutes with exit code 1,ERROR
+Deployment of checkout v5.3.4 completed successfully,INFO
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Disk usage on payments-api reached 78% capacity,WARNING
+Deprecated endpoint /checkout/v1 called by client 192.168.151.72,WARNING
+Kubernetes node auth-service not responding - all pods evicted,CRITICAL
+Failed to connect to database payments-api after 94 retries,ERROR
+Health check passed for service payments-api,INFO
+Possible brute-force attack detected on login endpoint from 192.168.151.72,SECURITY_ALERT
+Rate limit approaching for API key ending in 106,WARNING
+Possible brute-force attack detected on login endpoint from 192.168.51.184,SECURITY_ALERT
+Suspicious API key usage pattern detected for key ending 670,SECURITY_ALERT
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Unhandled exception in checkout: TimeoutError,ERROR
+NullPointerException in module user-db at line 514,ERROR
+Kubernetes node search-svc not responding - all pods evicted,CRITICAL
+Payment processing failed for order #821 - gateway timeout,ERROR
+Multiple failed login attempts detected for user amit from 192.168.51.184,SECURITY_ALERT
+SSL certificate for checkout expires in 14 days,WARNING
+Scheduled backup completed for database auth-service,INFO
+NullPointerException in module search-svc at line 655,ERROR
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Unauthorized access attempt to admin panel from 192.168.71.63,SECURITY_ALERT
+Payment processing failed for order #674 - gateway timeout,ERROR
+API response time for search-svc exceeded 2s threshold (4762ms),WARNING
+API response time for search-svc exceeded 2s threshold (2072ms),WARNING
+SSL certificate for auth-service expires in 14 days,WARNING
+SQL injection attempt blocked on endpoint /payments-api,SECURITY_ALERT
+Full disk outage on checkout - service unavailable,CRITICAL
+Request to notif-worker failed with status 500,ERROR
+Disk usage on user-db reached 78% capacity,WARNING
+Disk usage on payments-api reached 78% capacity,WARNING
+Production database user-db is DOWN - all connections refused,CRITICAL
+SQL injection attempt blocked on endpoint /payments-api,SECURITY_ALERT
+Unauthorized access attempt to admin panel from 192.168.24.98,SECURITY_ALERT
+Unhandled exception in payments-api: TimeoutError,ERROR
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Unhandled exception in notif-worker: TimeoutError,ERROR
+Fatal error: search-svc process terminated unexpectedly,CRITICAL
+SSL certificate for checkout expires in 14 days,WARNING
+Payment processing failed for order #684 - gateway timeout,ERROR
+Production database payments-api is DOWN - all connections refused,CRITICAL
+Payment processing failed for order #321 - gateway timeout,ERROR
+New user priya registered successfully,INFO
+Rate limit approaching for API key ending in 779,WARNING
+User sneha updated profile settings,INFO
+Disk usage on checkout reached 78% capacity,WARNING
+SSL certificate for notif-worker expires in 14 days,WARNING
+Unauthorized access attempt to admin panel from 192.168.208.223,SECURITY_ALERT
+Connection pool for checkout nearing max capacity,WARNING
+Suspicious API key usage pattern detected for key ending 217,SECURITY_ALERT
+Deployment of search-svc v4.7.3 completed successfully,INFO
+User anjali logged in successfully from 192.168.167.180,INFO
+Fatal error: search-svc process terminated unexpectedly,CRITICAL
+Scheduled backup completed for database search-svc,INFO
+Suspicious API key usage pattern detected for key ending 6,SECURITY_ALERT
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Production database search-svc is DOWN - all connections refused,CRITICAL
+Unauthorized access attempt to admin panel from 192.168.71.63,SECURITY_ALERT
+Unauthorized access attempt to admin panel from 192.168.179.109,SECURITY_ALERT
+"Service search-svc crashed - out of memory, restarting pod",CRITICAL
+Unusual data exfiltration pattern detected from search-svc,SECURITY_ALERT
+Failed to connect to database auth-service after 604 retries,ERROR
+User priya updated profile settings,INFO
+Deployment of auth-service v3.2.7 completed successfully,INFO
+User anjali logged in successfully from 192.168.51.184,INFO
+Scheduled backup completed for database search-svc,INFO
+Connection pool for payments-api nearing max capacity,WARNING
+Full disk outage on user-db - service unavailable,CRITICAL
+Unusual data exfiltration pattern detected from notif-worker,SECURITY_ALERT
+SQL injection attempt blocked on endpoint /search-svc,SECURITY_ALERT
+Rate limit approaching for API key ending in 407,WARNING
+Kubernetes node notif-worker not responding - all pods evicted,CRITICAL
+SQL injection attempt blocked on endpoint /auth-service,SECURITY_ALERT
+Suspicious API key usage pattern detected for key ending 389,SECURITY_ALERT
+New user vikram registered successfully,INFO
+Job user-db failed after 93 minutes with exit code 1,ERROR
+Request to search-svc failed with status 500,ERROR
+Deprecated endpoint /user-db/v1 called by client 192.168.229.140,WARNING
+Payment processing failed for order #342 - gateway timeout,ERROR
+Full disk outage on auth-service - service unavailable,CRITICAL
+SQL injection attempt blocked on endpoint /search-svc,SECURITY_ALERT
+NullPointerException in module checkout at line 794,ERROR
+Deployment of user-db v5.5.0 completed successfully,INFO
+NullPointerException in module checkout at line 100,ERROR
+SSL certificate for notif-worker expires in 14 days,WARNING
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Unusual data exfiltration pattern detected from payments-api,SECURITY_ALERT
+Connection pool for search-svc nearing max capacity,WARNING
+Disk usage on notif-worker reached 78% capacity,WARNING
+Deployment of notif-worker v2.8.3 completed successfully,INFO
+Fatal error: payments-api process terminated unexpectedly,CRITICAL
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Unhandled exception in checkout: TimeoutError,ERROR
+Fatal error: notif-worker process terminated unexpectedly,CRITICAL
+API response time for payments-api exceeded 2s threshold (1828ms),WARNING
+Kubernetes node search-svc not responding - all pods evicted,CRITICAL
+New user sneha registered successfully,INFO
+Failed to connect to database auth-service after 440 retries,ERROR
+Rate limit approaching for API key ending in 125,WARNING
+Unhandled exception in notif-worker: TimeoutError,ERROR
+Fatal error: payments-api process terminated unexpectedly,CRITICAL
+Request to user-db failed with status 500,ERROR
+API response time for user-db exceeded 2s threshold (3356ms),WARNING
+Unusual data exfiltration pattern detected from user-db,SECURITY_ALERT
+"Service notif-worker crashed - out of memory, restarting pod",CRITICAL
+New user rahul registered successfully,INFO
+Deployment of search-svc v5.4.1 completed successfully,INFO
+Deployment of notif-worker v3.0.0 completed successfully,INFO
+SQL injection attempt blocked on endpoint /notif-worker,SECURITY_ALERT
+Payment processing failed for order #39 - gateway timeout,ERROR
+SSL certificate for checkout expires in 14 days,WARNING
+API response time for payments-api exceeded 2s threshold (3429ms),WARNING
+User vikram updated profile settings,INFO
+Unauthorized access attempt to admin panel from 192.168.2.195,SECURITY_ALERT
+New user vikram registered successfully,INFO
+API response time for user-db exceeded 2s threshold (3819ms),WARNING
+Retry attempt 258 for job user-db after transient failure,WARNING
+Full disk outage on payments-api - service unavailable,CRITICAL
+Job auth-service failed after 97 minutes with exit code 1,ERROR
+Fatal error: notif-worker process terminated unexpectedly,CRITICAL
+Full disk outage on checkout - service unavailable,CRITICAL
+User amit logged in successfully from 192.168.229.140,INFO
+SSL certificate for payments-api expires in 14 days,WARNING
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+User rahul logged in successfully from 192.168.71.63,INFO
+Deprecated endpoint /auth-service/v1 called by client 192.168.51.184,WARNING
+Disk usage on user-db reached 78% capacity,WARNING
+Failed to connect to database search-svc after 279 retries,ERROR
+SQL injection attempt blocked on endpoint /auth-service,SECURITY_ALERT
+Deprecated endpoint /search-svc/v1 called by client 192.168.24.98,WARNING
+Unusual data exfiltration pattern detected from payments-api,SECURITY_ALERT
+Payment processing failed for order #852 - gateway timeout,ERROR
+Failed to send email to anjali - SMTP connection refused,ERROR
+Possible brute-force attack detected on login endpoint from 192.168.57.115,SECURITY_ALERT
+Retry attempt 956 for job checkout after transient failure,WARNING
+API response time for notif-worker exceeded 2s threshold (2740ms),WARNING
+Payment processing failed for order #760 - gateway timeout,ERROR
+Possible brute-force attack detected on login endpoint from 192.168.7.190,SECURITY_ALERT
+Deployment of user-db v3.5.8 completed successfully,INFO
+Request to notif-worker failed with status 500,ERROR
+Unusual data exfiltration pattern detected from payments-api,SECURITY_ALERT
+Disk usage on payments-api reached 78% capacity,WARNING
+Payment processing failed for order #180 - gateway timeout,ERROR
+Deployment of search-svc v2.2.8 completed successfully,INFO
+Connection pool for search-svc nearing max capacity,WARNING
+Production database search-svc is DOWN - all connections refused,CRITICAL
+SQL injection attempt blocked on endpoint /user-db,SECURITY_ALERT
+Payment processing failed for order #159 - gateway timeout,ERROR
+Payment processing failed for order #796 - gateway timeout,ERROR
+Kubernetes node search-svc not responding - all pods evicted,CRITICAL
+Failed to send email to anjali - SMTP connection refused,ERROR
+Possible brute-force attack detected on login endpoint from 192.168.51.184,SECURITY_ALERT
+"Service auth-service crashed - out of memory, restarting pod",CRITICAL
+Scheduled backup completed for database payments-api,INFO
+Rate limit approaching for API key ending in 763,WARNING
+New user amit registered successfully,INFO
+New user priya registered successfully,INFO
+API response time for checkout exceeded 2s threshold (4983ms),WARNING
+"Service payments-api crashed - out of memory, restarting pod",CRITICAL
+Job notif-worker failed after 824 minutes with exit code 1,ERROR
+Health check passed for service checkout,INFO
+Fatal error: notif-worker process terminated unexpectedly,CRITICAL
+Request to notif-worker failed with status 500,ERROR
+Fatal error: payments-api process terminated unexpectedly,CRITICAL
+Health check passed for service notif-worker,INFO
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Possible brute-force attack detected on login endpoint from 192.168.7.190,SECURITY_ALERT
+Unauthorized access attempt to admin panel from 192.168.167.180,SECURITY_ALERT
+Retry attempt 130 for job notif-worker after transient failure,WARNING
+Possible brute-force attack detected on login endpoint from 192.168.58.36,SECURITY_ALERT
+Failed to connect to database auth-service after 520 retries,ERROR
+Disk usage on auth-service reached 78% capacity,WARNING
+Unauthorized access attempt to admin panel from 192.168.167.180,SECURITY_ALERT
+Production database checkout is DOWN - all connections refused,CRITICAL
+Payment processing failed for order #640 - gateway timeout,ERROR
+Connection pool for search-svc nearing max capacity,WARNING
+Possible brute-force attack detected on login endpoint from 192.168.155.68,SECURITY_ALERT
+Unauthorized access attempt to admin panel from 192.168.109.9,SECURITY_ALERT
+Suspicious API key usage pattern detected for key ending 17,SECURITY_ALERT
+Health check passed for service search-svc,INFO
+SSL certificate for auth-service expires in 14 days,WARNING
+Unauthorized access attempt to admin panel from 192.168.56.60,SECURITY_ALERT
+Production database payments-api is DOWN - all connections refused,CRITICAL
+Fatal error: auth-service process terminated unexpectedly,CRITICAL
+"Service notif-worker crashed - out of memory, restarting pod",CRITICAL
+Scheduled backup completed for database user-db,INFO
+Failed to connect to database user-db after 62 retries,ERROR
+Scheduled backup completed for database notif-worker,INFO
+SQL injection attempt blocked on endpoint /payments-api,SECURITY_ALERT
+Retry attempt 544 for job checkout after transient failure,WARNING
+Production database payments-api is DOWN - all connections refused,CRITICAL
+Kubernetes node payments-api not responding - all pods evicted,CRITICAL
+User sneha updated profile settings,INFO
+Possible brute-force attack detected on login endpoint from 192.168.51.184,SECURITY_ALERT
+Request to payments-api failed with status 500,ERROR
+Unhandled exception in auth-service: TimeoutError,ERROR
+NullPointerException in module search-svc at line 284,ERROR
+Full disk outage on payments-api - service unavailable,CRITICAL
+NullPointerException in module notif-worker at line 309,ERROR
+User amit logged in successfully from 192.168.208.223,INFO
+Scheduled backup completed for database search-svc,INFO
+Failed to connect to database payments-api after 71 retries,ERROR
+Multiple failed login attempts detected for user vikram from 192.168.167.180,SECURITY_ALERT
+SSL certificate for user-db expires in 14 days,WARNING
+Deprecated endpoint /auth-service/v1 called by client 192.168.8.24,WARNING
+Scheduled backup completed for database notif-worker,INFO
+Deployment of checkout v2.3.6 completed successfully,INFO
+NullPointerException in module search-svc at line 779,ERROR
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Unusual data exfiltration pattern detected from payments-api,SECURITY_ALERT
+Health check passed for service payments-api,INFO
+Disk usage on notif-worker reached 78% capacity,WARNING
+Cache warmed up successfully in 4662ms,INFO
+Scheduled backup completed for database notif-worker,INFO
+Possible brute-force attack detected on login endpoint from 192.168.40.56,SECURITY_ALERT
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Production database payments-api is DOWN - all connections refused,CRITICAL
+Possible brute-force attack detected on login endpoint from 192.168.155.68,SECURITY_ALERT
+Scheduled backup completed for database user-db,INFO
+Daily report generated and emailed to anjali,INFO
+Health check passed for service auth-service,INFO
+Payment processing failed for order #232 - gateway timeout,ERROR
+Disk usage on checkout reached 78% capacity,WARNING
+Failed to send email to anjali - SMTP connection refused,ERROR
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+Production database user-db is DOWN - all connections refused,CRITICAL
+Production database checkout is DOWN - all connections refused,CRITICAL
+Cache warmed up successfully in 3477ms,INFO
+Payment gateway completely unresponsive for 5 minutes,CRITICAL
+NullPointerException in module user-db at line 703,ERROR
+Kubernetes node payments-api not responding - all pods evicted,CRITICAL
+NullPointerException in module notif-worker at line 991,ERROR
+Unauthorized access attempt to admin panel from 192.168.167.180,SECURITY_ALERT
+SSL certificate for notif-worker expires in 14 days,WARNING
+Failed to send email to amit - SMTP connection refused,ERROR
+Deprecated endpoint /notif-worker/v1 called by client 192.168.208.223,WARNING
+Possible brute-force attack detected on login endpoint from 192.168.7.190,SECURITY_ALERT
+Daily report generated and emailed to anjali,INFO
+Health check passed for service auth-service,INFO
+Deprecated endpoint /auth-service/v1 called by client 192.168.71.63,WARNING
+Full disk outage on payments-api - service unavailable,CRITICAL
+Multiple failed login attempts detected for user sneha from 192.168.87.27,SECURITY_ALERT
+New user priya registered successfully,INFO
