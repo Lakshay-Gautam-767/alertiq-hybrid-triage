@@ -27,14 +27,45 @@ When you deploy an application to the cloud, it can generate **thousands of log 
 
 ## How It Works
 
-1. **Ingest** — a raw log/ticket/alert line comes in via `/api/classify`.
-2. **Classical Classifier** scores it (TF-IDF + Logistic Regression) → returns a predicted label + confidence score.
-3. **Routing decision:**
-   - ✅ Confident **and** not `CRITICAL` → **return the classical label** directly (~$0.02 / 1,000 events)
-   - ⚠️ Not confident enough, **or** predicted label is `CRITICAL` → **escalate to the LLM** (Groq · Llama 3.1) for a second opinion (~$2.50 / 1,000 events)
-4. The LLM returns a label + a one-sentence reasoning string, which is written to the **feedback store** (CSV).
-5. Calling `/api/retrain` folds that feedback back into the base training data and retrains the classical model from scratch — so the escalation rate (and LLM bill) shrinks the longer the system runs.
-6. A cost tracker converts routing counts into a `$ / 1,000 events` metric, surfaced live on the dashboard.
+```
+                        ┌──────────────────────────┐
+                        │ Raw log / ticket / alert │
+                        └──────────────────────────┘
+                                      │
+                                      ▼
+                      ┌──────────────────────────────┐
+                      │ Classical Classifier         │
+                      │ TF-IDF + Logistic Regression │
+                      └──────────────────────────────┘
+                                      │
+                                      ▼
+                        ┌──────────────────────────┐
+                        │ Confident enough AND not │
+                        │ CRITICAL severity?       │
+                        └──────────────────────────┘
+                                      │
+                                      ▼
+                       ┌──────────────┴───────────────┐
+                       │   YES                     NO │
+                       ▼                              ▼
+          ┌────────────────────────┐      ┌──────────────────────┐
+          │ Return classical label │      │ Escalate to LLM      │
+          │ ~$0.02 / 1000 events   │      │ (Groq · Llama 3.1)   │
+          │                        │      │ ~$2.50 / 1000 events │
+          └────────────────────────┘      └──────────────────────┘
+                                                      │
+                                                      ▼
+                                     ┌─────────────────────────────────┐
+                                     │ Label + reasoning returned,     │
+                                     │ written to feedback store (CSV) │
+                                     └─────────────────────────────────┘
+                                                      │
+                                                      ▼
+                                      ┌──────────────────────────────┐
+                                      │ Retrain: folds feedback back │
+                                      │ into the classical model     │
+                                      └──────────────────────────────┘
+```
 
 ---
 
